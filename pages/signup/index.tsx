@@ -4,8 +4,18 @@ import '@/app/globals.css';
 import Link from 'next/link';
 import Form, { Field } from 'rc-field-form';
 import Input from '@/components/input';
+import { firebaseCreateUser, showError } from '@/utils';
+import { useRouter } from 'next/router';
+
+interface SignupPayload {
+	email: string;
+	password: string;
+	confirm_password: string;
+}
 
 const Signup = () => {
+	const router = useRouter();
+
 	return (
 		<section className='bg-gray-50 dark:bg-gray-900'>
 			<div className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
@@ -22,7 +32,17 @@ const Signup = () => {
 						</h1>
 						<Form
 							className='space-y-4 md:space-y-6'
-							onFinish={values => console.log(values)}
+							onFinish={({
+								email,
+								password,
+								confirm_password,
+							}: SignupPayload) => {
+								if (password === confirm_password) {
+									firebaseCreateUser(email, password, router);
+								} else {
+									showError('Password is not match');
+								}
+							}}
 						>
 							<div>
 								<label
@@ -53,15 +73,15 @@ const Signup = () => {
 							</div>
 							<div>
 								<label
-									htmlFor='confirm-password'
+									htmlFor='confirm_password'
 									className='block mb-2 text-sm font-medium text-gray-900 dark:text-white'
 								>
 									Confirm password
 								</label>
-								<Field name='confirm-password'>
+								<Field name='confirm_password'>
 									<Input
 										type='password'
-										id='confirm-password'
+										id='confirm_password'
 										placeholder='••••••••'
 										required
 									/>

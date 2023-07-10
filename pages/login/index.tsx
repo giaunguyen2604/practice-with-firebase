@@ -1,11 +1,19 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
 import React from 'react';
-import '@/app/globals.css';
 import Form, { Field } from 'rc-field-form';
 import Input from '@/components/input';
+import { firebaseLoginUser } from '@/utils';
+import { useRouter } from 'next/router';
+
+interface LoginPayload {
+	email: string;
+	password: string;
+}
 
 const Login = () => {
+	const router = useRouter();
+
 	return (
 		<section className='bg-gray-50 dark:bg-gray-900'>
 			<div className='flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0'>
@@ -22,8 +30,9 @@ const Login = () => {
 						</h1>
 						<Form
 							className='space-y-4 md:space-y-6'
-							onFinish={values => {
-								console.log(values);
+							onFinish={({ email, password }: LoginPayload) => {
+								console.log({ email, password });
+								firebaseLoginUser(email, password, router);
 							}}
 						>
 							<div>
