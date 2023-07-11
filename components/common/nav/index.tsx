@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import React from 'react';
 
 interface NavProps {
-	user: User | null;
+	user?: User | null;
 }
 
 const Nav: React.FC<NavProps> = ({ user }) => {

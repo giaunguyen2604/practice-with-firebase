@@ -1,1 +1,1 @@
-export const PROTECTED_URLS = ['/', '/tickets'];
+export const PROTECTED_URLS = ['/dashboard', '/events/[id]/[slug]'];
