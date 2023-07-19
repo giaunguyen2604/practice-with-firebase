@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from 'next/link';
-import React from 'react';
+import React, { useState } from 'react';
 import Form, { Field } from 'rc-field-form';
 import Input from '@/components/input';
 import { firebaseLoginUser } from '@/utils';
@@ -13,6 +13,7 @@ interface LoginPayload {
 
 const Login = () => {
 	const router = useRouter();
+	const [isSubmitting, setSubmitting] = useState(false);
 
 	return (
 		<section className='bg-gray-50 dark:bg-gray-900'>
@@ -30,9 +31,11 @@ const Login = () => {
 						</h1>
 						<Form
 							className='space-y-4 md:space-y-6'
-							onFinish={({ email, password }: LoginPayload) => {
+							onFinish={async ({ email, password }: LoginPayload) => {
 								console.log({ email, password });
-								firebaseLoginUser(email, password, router);
+								setSubmitting(true);
+								await firebaseLoginUser(email, password, router);
+								setSubmitting(false);
 							}}
 						>
 							<div>
@@ -64,6 +67,7 @@ const Login = () => {
 							</div>
 
 							<button
+								disabled={isSubmitting}
 								type='submit'
 								className='w-full text-white bg-blue-500 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800'
 							>

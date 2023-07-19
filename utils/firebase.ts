@@ -43,22 +43,25 @@ export const firebaseCreateUser = (
 		});
 };
 
-export const firebaseLoginUser = (
+export const firebaseLoginUser = async (
 	email: string,
 	password: string,
 	router: NextRouter
 ) => {
-	signInWithEmailAndPassword(auth, email, password)
-		.then(userCredential => {
-			const user = userCredential.user;
-			console.log(user);
-			showSuccess('Authentication successful 🎉');
-			router.push('/dashboard');
-		})
-		.catch(error => {
-			console.error(error);
-			showError('Incorrect Email/Password ❌');
-		});
+	try {
+		const userCredential = await signInWithEmailAndPassword(
+			auth,
+			email,
+			password
+		);
+		const user = userCredential.user;
+		console.log(user);
+		showSuccess('Authentication successful 🎉');
+		router.push('/dashboard');
+	} catch (error) {
+		console.error(error);
+		showError('Incorrect Email/Password ❌');
+	}
 };
 
 export const firebaseLogOut = (router: AppRouterInstance) => {
